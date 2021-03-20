@@ -1,5 +1,5 @@
-var Factory = artifacts.require('./Factory.sol');
 var Market = artifacts.require('./Market.sol');
+var Factory = artifacts.require('./Factory.sol');
 var Card = artifacts.require('./Card.sol');
 
 var sfHost = '0x22ff293e14F1EC3A09B137e9e06084AFd63adDF9'; // host on Goerli
@@ -16,7 +16,7 @@ module.exports = function(deployer, network, accounts) {
     return deployer.deploy(Market).then(function() {
     return deployer.deploy(Factory,Market.address,Card.address,sfHost,sfAgreement,fDAIx);
     })});
-    console.log('Factory ', Factory.address);
-    console.log('ReferenceMarket ', Market.address);
-    console.log('ReferenceCard ', Card.address);
+    // console.log('Factory ', Factory.address);
+    // console.log('ReferenceMarket ', Market.address);
+    // console.log('ReferenceCard ', Card.address);
 }
