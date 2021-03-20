@@ -38,7 +38,7 @@ contract Factory is Ownable {
     }
 
     function createMarket(uint256 _numberOfCards, uint256 marketFinishTime) external onlyOwner {
-        Market _market = new Market(referenceCard,_numberOfCards,marketFinishTime);
+        Market _market = new Market(_numberOfCards,marketFinishTime);
         markets.push(address(_market));
         string[] memory tokenURIs = new string[](20);
         for(uint256 i; i <_numberOfCards; i++){
