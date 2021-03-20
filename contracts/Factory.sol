@@ -4,6 +4,7 @@ pragma abicoder v2;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "./interfaces/IMarket.sol";
+import "./Market.sol";
 
 contract Factory is Ownable {
 
@@ -37,7 +38,7 @@ contract Factory is Ownable {
     }
 
     function createMarket(uint256 _numberOfCards, uint256 marketFinishTime) external onlyOwner {
-        address _marketAddress = new IMarket(referenceCard,_numberOfCards,marketFinishTime);
+        address _marketAddress = new Market(referenceCard,_numberOfCards,marketFinishTime);
         markets.push(_marketAddress);
         string[] memory tokenURIs = new string[](20);
         for(uint256 i; i <_numberOfCards; i++){
