@@ -5,7 +5,7 @@ pragma abicoder v2;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/proxy/Initializable.sol";
 import "@openzeppelin/contracts/proxy/Clones.sol";
-import "/interfaces/ICard.sol";
+import "./interfaces/ICard.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 contract Market is Ownable, Initializable, ERC721 {
@@ -65,7 +65,7 @@ contract Market is Ownable, Initializable, ERC721 {
         require(marketFinishTime <= block.timestamp);
         // winner has been decided, make a payout.
 
-        
+
     }
 
 }
