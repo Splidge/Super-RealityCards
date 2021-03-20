@@ -18,6 +18,9 @@ import {
 
 contract Market is Ownable, ERC721, SuperAppBase {
 
+    IInstantDistributionAgreementV1 private _ida;
+
+
     ////////////////////////////////////
     //////// EVENTS ////////////////////
     ////////////////////////////////////
