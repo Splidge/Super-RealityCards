@@ -3,7 +3,7 @@ pragma solidity ^0.7.4;
 pragma abicoder v2;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "./interfaces/ICard.sol";
+import "./Card.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import {
     ISuperfluid,
@@ -15,7 +15,7 @@ import {
     IInstantDistributionAgreementV1
 } from "@superfluid-finance/ethereum-contracts/contracts/interfaces/agreements/IInstantDistributionAgreementV1.sol";
 
-contract Market is Ownable, Initializable, ERC721, SuperAppBase {
+contract Market is Ownable, ERC721, SuperAppBase {
 
     ////////////////////////////////////
     //////// EVENTS ////////////////////
@@ -55,7 +55,7 @@ contract Market is Ownable, Initializable, ERC721, SuperAppBase {
         marketFinishTime = _marketFinishTime;
         // clone the cards, add them to the array and init them
         for(uint256 i; i < _numberOfCards; i++){
-            address _card = new ICard(sfHost, sfAgreements, daiSuperToken, MIN_BID_INCREASE);
+            address _card = new Card(sfHost, sfAgreements, daiSuperToken, MIN_BID_INCREASE);
             cards[i] = _card; 
             tokenIds[_card] = i;
             _mint(address(this), i); 
