@@ -367,10 +367,6 @@ contract Card is SuperAppBase, Ownable {
         // < do something to cancel all the streams >
         superToken.transferAll(address(market));
 
-
-
-
-
     }
 
 }

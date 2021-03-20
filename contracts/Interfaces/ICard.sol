@@ -4,6 +4,8 @@ pragma abicoder v2;
 
 interface ICard {
 
-    function initialize(address, address, address, int96) external;
+    function closeMarket() external;
+    function timeHeld(address) external;
+    function totalTimeHeld() external;
 
 }

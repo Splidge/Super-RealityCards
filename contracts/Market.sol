@@ -4,6 +4,7 @@ pragma abicoder v2;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "./Card.sol";
+import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import {
     ISuperfluid,
@@ -19,6 +20,15 @@ import {
 } from "@superfluid-finance/ethereum-contracts/contracts/interfaces/agreements/IConstantFlowAgreementV1.sol";
 
 contract Market is Ownable, ERC721, SuperAppBase {
+
+    using SafeMath for uint256;
+
+    //as
+    uint256 numberOfCards;
+    uint256 winningOutcome;
+    uint256 totalCollected;
+    bool marketFinalised;
+    mapping(address => bool) public userAlreadyWithdrawn;
 
     IInstantDistributionAgreementV1 private _ida;
     ISuperToken private daiSuperToken;
@@ -65,6 +75,7 @@ contract Market is Ownable, ERC721, SuperAppBase {
             tokenIds[address(_card)] = i;
             _mint(address(this), i); 
         }
+        numberOfCards = _numberOfCards;
     }
 
     function newRental(address _newOwner, uint256 _newPrice, uint256 _timeLimit) external {
@@ -78,9 +89,24 @@ contract Market is Ownable, ERC721, SuperAppBase {
 
     function declareWinner(uint256 _tokenId) external onlyOwner {
         require(marketFinishTime <= block.timestamp);
-        // winner has been decided, make a payout.
-        _tokenId;
+        for(uint256 i; i < numberOfCards; i++){
+            Card _card = Card(cards[i]);
+            _card.closeMarket();
+        }
+        totalCollected = balanceOf(address(this));
+        winningOutcome = _tokenId;
+        marketFinalised = true;
+    }
 
+    function withdraw() external {
+        require(marketFinalised, "Not finalised");
+        require(!userAlreadyWithdrawn[msg.sender], "Already withdrawn");
+        Card _card = Card(cards[winningOutcome]);
+        uint256 _winnersTimeHeld = _card.timeHeld(msg.sender);
+        uint256 _numerator = totalCollected.mul(_winnersTimeHeld);
+        uint256 _winningsToTransfer = _numerator.div(_card.totalTimeHeld());
+        daiSuperToken.send(msg.sender, _winningsToTransfer, "0");
+        userAlreadyWithdrawn[msg.sender] = true;
     }
 
 }
