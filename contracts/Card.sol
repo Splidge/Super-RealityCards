@@ -3,6 +3,7 @@ pragma solidity ^0.7.4;
 pragma abicoder v2;
 
 import "./interfaces/IMarket.sol";
+import "@openzeppelin/contracts/math/SafeMath.sol";
 
 import {
     ISuperfluid,
@@ -24,7 +25,14 @@ import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/SafeCast.sol";
 
 contract Card is SuperAppBase, Ownable {
+
+    using SafeMath for uint256;
+    
+    //as
     IMarket private market;
+    uint256 private timeNewOwnership;
+    mapping(address => uint256) public timeHeld;
+
     IConstantFlowAgreementV1 private cfa; 
     ISuperfluid private host;
     ISuperToken private superToken;
@@ -79,10 +87,10 @@ contract Card is SuperAppBase, Ownable {
         address user = host.decodeCtx(_ctx).msgSender;
         (,int96 flowRate,,) = cfa.getFlowByID(superToken, agreementId);
         require(flowRate * precision >= minStep, "Bid must be higher than minimum step");
-        if(winner == address(this)) _setNewWinner(user, flowRate);
+        if(winner == address(this)) _setNewWinner(newCtx, user, flowRate);
         else if(flowRate * precision >= bidders[winner].flowRate * precision + minStep){  //if flowRate > winnerFlowRate, but not by minStep, still goes in second place
             newCtx = _cancelBack(newCtx,  winner);
-            _setNewWinner(user, flowRate);
+            _setNewWinner(newCtx, user, flowRate);
         } else {
             _placeInList(user, flowRate);
             newCtx = _cancelBack(newCtx,  user);
@@ -123,7 +131,7 @@ contract Card is SuperAppBase, Ownable {
             if(flowRate * precision >= bidders[winner].flowRate * precision + minStep){  //if flowRate > winnerFlowRate, but not by minStep, still goes in second place. WEIRD
                 newCtx = _stopCancelBack(newCtx, user);
                 newCtx = _cancelBack(newCtx,  winner);
-                _setNewWinner(user, flowRate);
+                _setNewWinner(newCtx, user, flowRate);
             } else{
                 // place it in the list again
                 _placeInList(user,flowRate);
@@ -133,13 +141,18 @@ contract Card is SuperAppBase, Ownable {
         }
     }
 
-    function _setNewWinner(address bidder, int96 flowRate) private {   //   use this only if new winner is result of bid increased over current winner
+    function _setNewWinner(bytes memory ctx, address bidder, int96 flowRate) private {   //   use this only if new winner is result of bid increased over current winner
         bidders[bidder] = Bid(flowRate, winner, address(this));
         bidders[winner].prev = bidder;
         winner = bidder;
         minStep = flowRate * (markup - precision);
         uint256 bidPrice = SafeCast.toUint256(flowRate).mul(86400);
         market.newRental(bidder,bidPrice,0);
+
+        // update timeHelds
+        uint256 _timeHeldToAdd = host.decodeCtx(ctx).timestamp.sub(timeNewOwnership);
+        timeHeld[winner] = timeHeld[winner].add(_timeHeldToAdd);
+        timeNewOwnership = host.decodeCtx(ctx).timestamp;
     }
 
     function _cancelBack(bytes memory ctx, address bidder)
