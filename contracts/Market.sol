@@ -36,10 +36,12 @@ contract Market is Ownable, Initializable {
     ////////////////////////////////////
 
     address[] cards;
+    uint256 marketFinishTime;
 
     constructor(){}
 
-    function initialize(address _cardReference, uint256 _numberOfCards) external initializer {
+    function initialize(address _cardReference, uint256 _numberOfCards, uint256 _marketFinishTime) external initializer {
+        marketFinishTime = _marketFinishTime;
         // clone the cards, add them to the array and init them
         for(uint256 i; i < _numberOfCards; i++){
             address _card = Clones.clone(_cardReference);
@@ -58,5 +60,11 @@ contract Market is Ownable, Initializable {
         LogExit(owner, tokenId, exitFlag);
     }
 
+    function declareWinner(uint256 _tokenId) external onlyOwner {
+        require(marketFinishTime <= block.timestamp);
+        // winner has been decided, make a payout.
+
+        
+    }
 
 }
