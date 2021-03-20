@@ -15,7 +15,6 @@ import {
     IInstantDistributionAgreementV1
 } from "@superfluid-finance/ethereum-contracts/contracts/interfaces/agreements/IInstantDistributionAgreementV1.sol";
 
-
 contract Market is Ownable, ERC721, SuperAppBase {
 
     IInstantDistributionAgreementV1 private _ida;
