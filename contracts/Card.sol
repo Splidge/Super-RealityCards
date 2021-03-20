@@ -363,7 +363,7 @@ contract Card is SuperAppBase, Ownable {
         uint256 _timeHeldToAdd = market.marketFinishTime().sub(timeNewOwnership);
         timeHeld[winner] = timeHeld[winner].add(_timeHeldToAdd);
         // < do something to cancel all the streams >
-        // send funds back to the market for distribution
+        superToken.transfer(address(market),superToken.balanceOf(address(this)));
 
 
 

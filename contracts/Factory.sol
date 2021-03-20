@@ -3,7 +3,6 @@ pragma solidity ^0.7.4;
 pragma abicoder v2;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/proxy/Clones.sol";
 import "./interfaces/IMarket.sol";
 
 contract Factory is Ownable {
@@ -38,10 +37,8 @@ contract Factory is Ownable {
     }
 
     function createMarket(uint256 _numberOfCards, uint256 marketFinishTime) external onlyOwner {
-        address _marketAddress = Clones.clone(referenceMarket);
+        address _marketAddress = new IMarket(referenceCard,_numberOfCards,marketFinishTime);
         markets.push(_marketAddress);
-        IMarket _marketInstance = IMarket(_marketAddress);
-        _marketInstance.initialize(referenceCard,_numberOfCards,marketFinishTime);
         string[] memory tokenURIs = new string[](20);
         for(uint256 i; i <_numberOfCards; i++){
             tokenURIs[i] = 'i';
