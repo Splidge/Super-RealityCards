@@ -1,5 +1,5 @@
 require("dotenv").config();
-
+const fs = require('fs');
 
 /**
  * Use this file to configure your truffle project. It's seeded with some
@@ -67,16 +67,19 @@ module.exports = {
         return new HDWalletProvider(MNEMONIC, `https://goerli.infura.io/v3/${INFURA_KEY}`);
       },
       network_id: 5,
-      gas: 15000000,
+      gas: 8000000,
+      skipDryRun: true,
+      gasPrice: 3000000000,
     },
     ropsten: {
-      provider: () => new HDWalletProvider(MNEMONIC, `https://ropsten.infura.io/v3/${INFURA_KEY}`),
-      network_id: 3, // Ropsten's id
-      gas: 5500000, // Ropsten has a lower block limit than mainnet
-      confirmations: 2, // # of confs to wait between deployments. (default: 0)
-      timeoutBlocks: 200, // # of blocks before a deployment times out  (minimum/default: 50)
-      skipDryRun: true, // Skip dry run before migrations? (default: false for public nets )
-    },
+      provider: () => new HDWalletProvider( MNEMONIC, `https://ropsten.infura.io/v3/${INFURA_KEY}`),
+      network_id: 3,       // Ropsten's id
+      gas: 8000000,        // Ropsten has a lower block limit than mainnet
+      confirmations: 0,    // # of confs to wait between deployments. (default: 0)
+      timeoutBlocks: 50,  // # of blocks before a deployment times out  (minimum/default: 50)
+      skipDryRun: true,     // Skip dry run before migrations? (default: false for public nets )
+      gasPrice: 3000000000,
+     },
     // Useful for private networks
     // private: {
     // provider: () => new HDWalletProvider(mnemonic, `https://network.io`),
