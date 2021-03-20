@@ -30,16 +30,25 @@ contract Market is Ownable, Initializable {
     event LogPayoutDetails(address indexed artistAddress, address marketCreatorAddress, address affiliateAddress, address[] cardAffiliateAddresses, uint256 indexed artistCut, uint256 winnerCut, uint256 creatorCut, uint256 affiliateCut, uint256 cardAffiliateCut);
     event LogTransferCardToLongestOwner(uint256 tokenId, address longestOwner);
 
+    ////////////////////////////////////
+    //////// VARIABLES /////////////////
+    ////////////////////////////////////
 
-    constructor(){
-    }
+    address[] cards;
 
-    function initialize() external initializer {
+    constructor(){}
 
+    function initialize(address _cardReference, uint256 _numberOfCards) external initializer {
+        for(uint256 i; i < _numberOfCards; i++){
+            address _card = Clones.clone(_cardReference);
+            cards[i] = _card;
+            
+        }
     }
 
     function newRental(address _newOwner, uint256 _newPrice, uint256 _timeLimit, uint256 _tokenId) external {
         LogNewRental(_newOwner, _newPrice, _timeLimit, _tokenId);
     }
+
 
 }
