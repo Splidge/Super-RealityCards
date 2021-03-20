@@ -37,6 +37,7 @@ contract Market is Ownable, Initializable, ERC721 {
     ////////////////////////////////////
 
     address[] public cards;
+    mapping (address => uint256) public tokenIds; 
     uint256 public marketFinishTime;
     address public sfHost;
     address public sfAgreements;
@@ -51,25 +52,24 @@ contract Market is Ownable, Initializable, ERC721 {
         for(uint256 i; i < _numberOfCards; i++){
             address _card = Clones.clone(_cardReference);
             cards[i] = _card;
+            tokenIds[_card] = i;
             ICard _cardInstance = ICard(_card);
             _cardInstance.initialize(sfHost, sfAgreements, daiSuperToken, MIN_BID_INCREASE);
+            _mint(address(this), i); 
         }
+
+
 
 
     }
 
     function newRental(address _newOwner, uint256 _newPrice, uint256 _timeLimit, uint256 _tokenId) external {
+        _transfer(ownerOf(tokenIds[msg.sender]), _newOwner, tokenIds[msg.sender]);
         LogNewRental(_newOwner, _newPrice, _timeLimit, _tokenId);
     }
 
     function exit(address owner) external {
-        uint256 _tokenID;
-        for(uint256 i; i < cards.length; i++){
-            if(msg.sender == cards[i])
-            {
-                _tokenID = i;
-            }
-        LogExit(owner, _tokenID, true);
+        LogExit(owner, tokenIds[msg.sender], true);
     }
 
     function declareWinner(uint256 _tokenId) external onlyOwner {
