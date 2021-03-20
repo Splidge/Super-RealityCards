@@ -31,6 +31,7 @@ contract Card is SuperAppBase, Ownable {
     IMarket private market;
     uint256 private timeNewOwnership;
     mapping(address => uint256) public timeHeld;
+    uint256 public totalTimeHeld;
 
     IConstantFlowAgreementV1 private cfa; 
     ISuperfluid private host;
@@ -149,6 +150,7 @@ contract Card is SuperAppBase, Ownable {
         // update timeHelds
         uint256 _timeHeldToAdd = host.decodeCtx(ctx).timestamp.sub(timeNewOwnership);
         timeHeld[winner] = timeHeld[winner].add(_timeHeldToAdd);
+        totalTimeHeld = totalTimeHeld.add(_timeHeldToAdd);
         timeNewOwnership = host.decodeCtx(ctx).timestamp;
     }
 
@@ -361,6 +363,7 @@ contract Card is SuperAppBase, Ownable {
         assert(block.timestamp >= market.marketFinishTime());
         uint256 _timeHeldToAdd = market.marketFinishTime().sub(timeNewOwnership);
         timeHeld[winner] = timeHeld[winner].add(_timeHeldToAdd);
+        totalTimeHeld = totalTimeHeld.add(_timeHeldToAdd);
         // < do something to cancel all the streams >
         superToken.transfer(address(market),superToken.balanceOf(address(this)));
 
