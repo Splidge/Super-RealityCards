@@ -7,6 +7,16 @@ import "@openzeppelin/contracts/proxy/Initializable.sol";
 import "@openzeppelin/contracts/proxy/Clones.sol";
 import "./interfaces/ICard.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import {
+    ISuperfluid,
+    ISuperToken,
+    SuperAppBase,
+    SuperAppDefinitions
+} from "@superfluid-finance/ethereum-contracts/contracts/apps/SuperAppBase.sol";
+import {
+    IInstantDistributionAgreementV1
+} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/agreements/IInstantDistributionAgreementV1.sol";
+
 
 contract Market is Ownable, Initializable, ERC721 {
 
