@@ -56,7 +56,7 @@ contract Market is Ownable, ERC721, SuperAppBase {
         marketFinishTime = _marketFinishTime;
         // clone the cards, add them to the array and init them
         for(uint256 i; i < _numberOfCards; i++){
-            address _card = new ICard(sfHost, sfAgreements, daiSuperToken, MIN_BID_INCREASE);
+            address _card = new Card(sfHost, sfAgreements, daiSuperToken, MIN_BID_INCREASE);
             cards[i] = _card; 
             tokenIds[_card] = i;
             _mint(address(this), i); 
