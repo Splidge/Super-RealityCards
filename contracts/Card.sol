@@ -365,7 +365,7 @@ contract Card is SuperAppBase, Ownable {
         timeHeld[winner] = timeHeld[winner].add(_timeHeldToAdd);
         totalTimeHeld = totalTimeHeld.add(_timeHeldToAdd);
         // < do something to cancel all the streams >
-        superToken.transfer(address(market),superToken.balanceOf(address(this)));
+        superToken.transferAll(address(market));
 
 
 
