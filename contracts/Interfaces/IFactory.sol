@@ -2,7 +2,7 @@
 pragma solidity ^0.7.4;
 pragma abicoder v2;
 
-interface Factory {
+interface IFactory {
     function initialize() external;
     function createMarket() external;
 }
