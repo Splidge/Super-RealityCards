@@ -3,7 +3,7 @@ pragma solidity ^0.7.4;
 pragma abicoder v2;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "./interfaces/ICard.sol";
+import "./Card.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import {
     ISuperfluid,
@@ -16,22 +16,7 @@ import {
 } from "@superfluid-finance/ethereum-contracts/contracts/interfaces/agreements/IInstantDistributionAgreementV1.sol";
 
 
-import {
-    ISuperfluid,
-    ISuperToken,
-    ISuperAgreement,
-    SuperAppDefinitions
-} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperfluid.sol";
-
-import {
-    IConstantFlowAgreementV1
-} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/agreements/IConstantFlowAgreementV1.sol";
-
-import {
-    SuperAppBase
-} from "@superfluid-finance/ethereum-contracts/contracts/apps/SuperAppBase.sol";
-
-contract Market is Ownable, Initializable, ERC721, SuperAppBase {
+contract Market is Ownable, ERC721, SuperAppBase {
 
     ////////////////////////////////////
     //////// EVENTS ////////////////////
