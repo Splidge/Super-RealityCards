@@ -12,15 +12,11 @@ import {
     SuperAppDefinitions
 } from "@superfluid-finance/ethereum-contracts/contracts/apps/SuperAppBase.sol";
 import {
-    IInstantDistributionAgreementV1
-} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/agreements/IInstantDistributionAgreementV1.sol";
-import {
     IConstantFlowAgreementV1
 } from "@superfluid-finance/ethereum-contracts/contracts/interfaces/agreements/IConstantFlowAgreementV1.sol";
 
 contract Market is Ownable, ERC721, SuperAppBase {
 
-    IInstantDistributionAgreementV1 private _ida;
     ISuperToken private daiSuperToken;
     ISuperfluid private sfHost;
     IConstantFlowAgreementV1 private sfAgreements;
