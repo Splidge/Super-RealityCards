@@ -19,7 +19,6 @@ import {
 import {
     SuperAppBase
 } from "@superfluid-finance/ethereum-contracts/contracts/apps/SuperAppBase.sol";
-import "@openzeppelin/contracts/proxy/Initializable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/SafeCast.sol";
@@ -27,7 +26,7 @@ import "@openzeppelin/contracts/utils/SafeCast.sol";
 contract Card is SuperAppBase, Ownable {
 
     using SafeMath for uint256;
-    
+
     //as
     IMarket private market;
     uint256 private timeNewOwnership;
@@ -52,9 +51,7 @@ contract Card is SuperAppBase, Ownable {
 
     using SafeMath for uint256;
 
-    constructor(){}
-
-    function initialize(
+    constructor(
         ISuperfluid _host,
         IConstantFlowAgreementV1 _cfa,
         ISuperToken _superToken,
@@ -65,6 +62,7 @@ contract Card is SuperAppBase, Ownable {
         require(address(_superToken) != address(0), "superToken1 is nil");
 
         market = IMarket(msg.sender);
+        dai = _daixAddress;
         host = _host;
         cfa = _cfa;
         superToken = _superToken;
@@ -362,7 +360,12 @@ contract Card is SuperAppBase, Ownable {
 
     function closeMarket() external onlyOwner {
         assert(block.timestamp >= market.marketFinishTime());
+        uint256 _timeHeldToAdd = market.marketFinishTime().sub(timeNewOwnership);
+        timeHeld[winner] = timeHeld[winner].add(_timeHeldToAdd);
+        // < do something to cancel all the streams >
         // send funds back to the market for distribution
+
+
 
 
 

@@ -50,16 +50,11 @@ contract Market is Ownable, Initializable, ERC721 {
         marketFinishTime = _marketFinishTime;
         // clone the cards, add them to the array and init them
         for(uint256 i; i < _numberOfCards; i++){
-            address _card = Clones.clone(_cardReference);
-            cards[i] = _card;
+            address _card = new ICard(sfHost, sfAgreements, daiSuperToken, MIN_BID_INCREASE);
+            cards[i] = _card; 
             tokenIds[_card] = i;
-            ICard _cardInstance = ICard(_card);
-            _cardInstance.initialize(sfHost, sfAgreements, daiSuperToken, MIN_BID_INCREASE);
             _mint(address(this), i); 
         }
-
-
-
 
     }
 
