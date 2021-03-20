@@ -54,8 +54,8 @@ contract Market is Ownable, Initializable {
         LogNewRental(_newOwner, _newPrice, _timeLimit, _tokenId);
     }
 
-    function exit(address owner, uint256 tokenID, bool exit) external {
-        LogExit(owner, tokenId, exit);
+    function exit(address owner, uint256 tokenID, bool exitFlag) external {
+        LogExit(owner, tokenId, exitFlag);
     }
 
 
