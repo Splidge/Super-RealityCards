@@ -11,8 +11,12 @@ contract Factory is Ownable, Initializable {
 
     constructor(){}
 
-    function initialize(address _cardReference, uint256 _numberOfCards, uint256 _marketFinishTime) external initializer {
+    function initialize() external initializer {
    
+    }
+
+    function createMarket() external onlyOwner {
+        
     }
 
 }
