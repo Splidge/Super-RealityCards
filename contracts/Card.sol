@@ -62,7 +62,6 @@ contract Card is SuperAppBase, Ownable {
         require(address(_superToken) != address(0), "superToken1 is nil");
 
         market = IMarket(msg.sender);
-        dai = _daixAddress;
         host = _host;
         cfa = _cfa;
         superToken = _superToken;
