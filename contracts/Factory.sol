@@ -8,8 +8,6 @@ import "./Market.sol";
 
 contract Factory is Ownable {
 
-    address public referenceMarket;
-    address public referenceCard;
     address[] public markets;
     address public sfHost;
     address public sfAgreements;
@@ -29,9 +27,7 @@ contract Factory is Ownable {
     event LogAdvancedWarning(uint256 _newAdvancedWarning);
     event LogMaximumDuration(uint256 _newMaximumDuration);
 
-    constructor(address _referenceMarket, address _referenceCard, address _sfHost, address _sfAgreements, address _daiSuperToken){
-        referenceMarket =_referenceMarket;
-        referenceCard = _referenceCard;
+    constructor(address _sfHost, address _sfAgreements, address _daiSuperToken){
         sfHost = _sfHost;
         sfAgreements = _sfAgreements;
         daiSuperToken = _daiSuperToken;
@@ -58,10 +54,8 @@ contract Factory is Ownable {
     }
 
 
-    function setAddresses(address _referenceMarket, address _referenceCard, address _sfHost, address _sfAgreements, address _daiSuperToken) external onlyOwner {
+    function setAddresses(address _referenceCard, address _sfHost, address _sfAgreements, address _daiSuperToken) external onlyOwner {
         // maybe we just use this instead of the constructor?
-        referenceMarket =_referenceMarket;
-        referenceCard = _referenceCard;
         sfHost = _sfHost;
         sfAgreements = _sfAgreements;
         daiSuperToken = _daiSuperToken;

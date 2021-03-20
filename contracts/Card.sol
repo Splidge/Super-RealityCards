@@ -366,7 +366,6 @@ contract Card is SuperAppBase, Ownable {
         totalTimeHeld = totalTimeHeld.add(_timeHeldToAdd);
         // < do something to cancel all the streams >
         superToken.transferAll(address(market));
-
     }
 
 }
