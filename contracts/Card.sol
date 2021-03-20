@@ -39,7 +39,9 @@ contract Card is SuperAppBase, Ownable {
     // simple way to avoid having to sort the bids is that you only allow high bids
     address public winner = address(this);  // current winner
 
-    constructor(
+    constructor(){}
+
+    function initialize(
         ISuperfluid _host,
         IConstantFlowAgreementV1 _cfa,
         ISuperToken _superToken,
