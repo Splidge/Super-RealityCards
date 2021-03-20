@@ -3,12 +3,25 @@ pragma solidity ^0.7.4;
 pragma abicoder v2;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/proxy/Initializable.sol";
-import "@openzeppelin/contracts/proxy/Clones.sol";
 import "./interfaces/ICard.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
-contract Market is Ownable, Initializable, ERC721 {
+import {
+    ISuperfluid,
+    ISuperToken,
+    ISuperAgreement,
+    SuperAppDefinitions
+} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperfluid.sol";
+
+import {
+    IConstantFlowAgreementV1
+} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/agreements/IConstantFlowAgreementV1.sol";
+
+import {
+    SuperAppBase
+} from "@superfluid-finance/ethereum-contracts/contracts/apps/SuperAppBase.sol";
+
+contract Market is Ownable, Initializable, ERC721, SuperAppBase {
 
     ////////////////////////////////////
     //////// EVENTS ////////////////////
@@ -44,9 +57,7 @@ contract Market is Ownable, Initializable, ERC721 {
     address public daiSuperToken;
     int96 public MIN_BID_INCREASE = 110000; // 110000 is 10%, there's 3 decimal places precision
 
-    constructor() ERC721("SuperRealityCards","SRC") {}
-
-    function initialize(address _cardReference, uint256 _numberOfCards, uint256 _marketFinishTime) external initializer {
+    constructor(address _cardReference, uint256 _numberOfCards, uint256 _marketFinishTime) ERC721("SuperRealityCards","SRC") {
         marketFinishTime = _marketFinishTime;
         // clone the cards, add them to the array and init them
         for(uint256 i; i < _numberOfCards; i++){
@@ -55,7 +66,6 @@ contract Market is Ownable, Initializable, ERC721 {
             tokenIds[_card] = i;
             _mint(address(this), i); 
         }
-
     }
 
     function newRental(address _newOwner, uint256 _newPrice, uint256 _timeLimit) external {
