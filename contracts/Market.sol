@@ -43,7 +43,7 @@ contract Market is Ownable, Initializable, ERC721 {
     address public daiSuperToken;
     int96 public MIN_BID_INCREASE = 110000; // 110000 is 10%, there's 3 decimal places precision
 
-    constructor(){}
+    constructor() ERC721("SuperRealityCards","SRC") {}
 
     function initialize(address _cardReference, uint256 _numberOfCards, uint256 _marketFinishTime) external initializer {
         marketFinishTime = _marketFinishTime;
