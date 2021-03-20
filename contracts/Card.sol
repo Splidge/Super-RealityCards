@@ -211,7 +211,7 @@ contract Card is SuperAppBase, Ownable {
         bidders[tempNext].prev = user;
     }
 
-    function _closeBid(bytes calldata _ctx, bytes32 agreementId, address user)
+    function _closeBid(bytes calldata _ctx, bytes32 /*agreementId*/, address user)
         private
         returns (bytes memory newCtx)
     {
@@ -236,12 +236,28 @@ contract Card is SuperAppBase, Ownable {
     /**************************************************************************
      * SuperApp callbacks
      *************************************************************************/
+
+    function beforeAgreementCreated(
+        ISuperToken _superToken,
+        address _agreementClass,
+        bytes32 /*_agreementId*/,
+        bytes calldata /*_agreementData*/,
+        bytes calldata /*_ctx*/
+    ) external view override
+        onlyExpected(_superToken, _agreementClass)
+        onlyHost
+        returns (bytes memory)
+    {
+        require(block.timestamp <= market.marketFinishTime()); // DC, I think this is safe
+        return new bytes(0);
+    }
+
     function afterAgreementCreated(
         ISuperToken _superToken,
         address _agreementClass,
         bytes32 _agreementId,
         bytes calldata /*_agreementData*/,
-        bytes calldata _cbdata,
+        bytes calldata /*_cbdata*/,
         bytes calldata _ctx
     )
         external override
@@ -249,8 +265,22 @@ contract Card is SuperAppBase, Ownable {
         onlyHost
         returns (bytes memory)
     {
-        require(block.timestamp <= market.marketFinishTime()); // DC, I think this is safe
         return _placeBid(_ctx, _agreementId);
+    }
+
+    function beforeAgreementUpdated(
+        ISuperToken _superToken,
+        address _agreementClass,
+        bytes32 /*_agreementId*/,
+        bytes calldata /*_agreementData*/,
+        bytes calldata /*_ctx*/
+    ) external view override
+        onlyExpected(_superToken, _agreementClass)
+        onlyHost
+        returns (bytes memory)
+    {
+        require(block.timestamp <= market.marketFinishTime()); // DC, I think this is safe
+        return new bytes(0);
     }
 
     function afterAgreementUpdated(
@@ -266,7 +296,6 @@ contract Card is SuperAppBase, Ownable {
         onlyHost
         returns (bytes memory)
     {
-        require(block.timestamp <= market.marketFinishTime()); // DC, I think this is safe
         return _updateBid(_ctx, _agreementId); //this should break instead
     }
 
@@ -287,6 +316,7 @@ contract Card is SuperAppBase, Ownable {
         (address user,) = abi.decode(_agreementData, (address, address));
         if (block.timestamp >= market.marketFinishTime()){
             bytes memory newCtx = _stopCancelBack(_ctx, user);
+            market.exit(user);
             return newCtx;
         }
         return _closeBid(_ctx, _agreementId, user);
@@ -317,13 +347,11 @@ contract Card is SuperAppBase, Ownable {
     ///// Market Resolution /////
     /////////////////////////////
 
-    modifier checkState(){
-        if(block.timestamp >= market.marketFinishTime()){_closeMarket();}
-        _;
-    }
+    function closeMarket() external onlyOwner {
+        assert(block.timestamp >= market.marketFinishTime());
+        // send funds back to the market for distribution
 
-    function _closeMarket() internal {
-        // DO NOT REVERT IN HERE, if this is called by a user closing a flow then the flow will not be closed.
+
 
     }
 
