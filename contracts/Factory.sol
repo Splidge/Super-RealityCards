@@ -38,8 +38,8 @@ contract Factory is Ownable {
     }
 
     function createMarket(uint256 _numberOfCards, uint256 marketFinishTime) external onlyOwner {
-        address _marketAddress = new Market(referenceCard,_numberOfCards,marketFinishTime);
-        markets.push(_marketAddress);
+        Market _market = new Market(referenceCard,_numberOfCards,marketFinishTime);
+        markets.push(address(_market));
         string[] memory tokenURIs = new string[](20);
         for(uint256 i; i <_numberOfCards; i++){
             tokenURIs[i] = 'i';
@@ -50,9 +50,9 @@ contract Factory is Ownable {
         timestamps[2] = uint32(marketFinishTime);
         uint256 totalNftMintCount = _numberOfCards;
         string memory ipfsHash = '0x0';
-        LogMarketCreated1(_marketAddress , zeroAddress, zeroAddress, 1);
-        LogMarketCreated2(_marketAddress, 0, tokenURIs, ipfsHash, timestamps, totalNftMintCount);
-        LogMarketApproved(_marketAddress, true);
+        LogMarketCreated1(address(_market) , zeroAddress, zeroAddress, 1);
+        LogMarketCreated2(address(_market), 0, tokenURIs, ipfsHash, timestamps, totalNftMintCount);
+        LogMarketApproved(address(_market), true);
         LogAdvancedWarning(0);
         LogMaximumDuration(uint32(marketFinishTime-block.timestamp));
     }
