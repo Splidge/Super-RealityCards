@@ -6,12 +6,40 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/proxy/Initializable.sol";
 import "@openzeppelin/contracts/proxy/Clones.sol";
 
-contract Market is Ownable {
+contract Market is Ownable, Initializable {
+
+    ////////////////////////////////////
+    //////// EVENTS ////////////////////
+    ////////////////////////////////////
+
+    event LogNewRental(address indexed newOwner, uint256 indexed newPrice, uint256 timeHeldLimit, uint256 indexed tokenId);
+    event LogForeclosure(address indexed prevOwner, uint256 indexed tokenId);
+    event LogRentCollection(uint256 indexed rentCollected, uint256 indexed tokenId, address indexed owner);
+    event LogReturnToPreviousOwner(uint256 indexed tokenId, address indexed previousOwner);
+    event LogContractLocked(bool indexed didTheEventFinish);
+    event LogWinnerKnown(uint256 indexed winningOutcome);
+    event LogWinningsPaid(address indexed paidTo, uint256 indexed amountPaid);
+    event LogStakeholderPaid(address indexed paidTo, uint256 indexed amountPaid);
+    event LogRentReturned(address indexed returnedTo, uint256 indexed amountReturned);
+    event LogTimeHeldUpdated(uint256 indexed newTimeHeld, address indexed owner, uint256 indexed tokenId);
+    event LogStateChange(uint256 indexed newState);
+    event LogUpdateTimeHeldLimit(address indexed owner, uint256 newLimit, uint256 tokenId);
+    event LogExit(address indexed owner, uint256 tokenId, bool exit);
+    event LogSponsor(uint256 indexed amount);
+    event LogNftUpgraded(uint256 indexed currentTokenId, uint256 indexed newTokenId);
+    event LogPayoutDetails(address indexed artistAddress, address marketCreatorAddress, address affiliateAddress, address[] cardAffiliateAddresses, uint256 indexed artistCut, uint256 winnerCut, uint256 creatorCut, uint256 affiliateCut, uint256 cardAffiliateCut);
+    event LogTransferCardToLongestOwner(uint256 tokenId, address longestOwner);
+
 
     constructor(){
+    }
+
+    function initialize() external initializer {
 
     }
 
-
+    function newRental(address _newOwner, uint256 _newPrice, uint256 _timeLimit, uint256 _tokenId) external {
+        LogNewRental(_newOwner, _newPrice, _timeLimit, _tokenId);
+    }
 
 }
