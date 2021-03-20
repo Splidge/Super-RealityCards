@@ -365,6 +365,10 @@ contract Card is SuperAppBase, Ownable {
         timeHeld[winner] = timeHeld[winner].add(_timeHeldToAdd);
         totalTimeHeld = totalTimeHeld.add(_timeHeldToAdd);
         // < do something to cancel all the streams >
+        // call _stopCancelBack(bytes(0),user) for every user in the orderbook
+        // i'm not 100% we can just send bytes(0) but worth a try
+        // if not then we need to store the _ctx for each bidder so we can send that again when we delete it.
+
         superToken.transferAll(address(market));
     }
 
