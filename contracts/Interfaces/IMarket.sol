@@ -6,6 +6,6 @@ interface IMarket {
 
     function initialize(address _cardReference, uint256 _numberOfCards, uint256 _marketFinishTime) external;
     function newRental(address _newOwner, uint256 _newPrice, uint256 _timeLimit, uint256 _tokenId) external;
-    function exit(address owner, uint256 tokenID, bool exitFlag) external;
+    function exit(address owner) external;
 
 }

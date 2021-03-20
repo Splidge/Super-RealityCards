@@ -228,6 +228,7 @@ contract Card is SuperAppBase, Ownable {
           bidders[bidders[user].next].prev = bidders[user].prev;
       }
       delete bidders[user];
+      market.exit(bidder);
     }
     /**************************************************************************
      * SuperApp callbacks

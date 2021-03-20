@@ -55,14 +55,21 @@ contract Market is Ownable, Initializable, ERC721 {
             _cardInstance.initialize(sfHost, sfAgreements, daiSuperToken, MIN_BID_INCREASE);
         }
 
+
     }
 
     function newRental(address _newOwner, uint256 _newPrice, uint256 _timeLimit, uint256 _tokenId) external {
         LogNewRental(_newOwner, _newPrice, _timeLimit, _tokenId);
     }
 
-    function exit(address owner, uint256 tokenID, bool exitFlag) external {
-        LogExit(owner, tokenID, exitFlag);
+    function exit(address owner) external {
+        uint256 _tokenID;
+        for(uint256 i; i < cards.length; i++){
+            if(msg.sender == cards[i])
+            {
+                _tokenID = i;
+            }
+        LogExit(owner, _tokenID, true);
     }
 
     function declareWinner(uint256 _tokenId) external onlyOwner {
