@@ -2,7 +2,7 @@
 pragma solidity ^0.7.4;
 pragma abicoder v2;
 
-import "/interfaces/IMarket.sol";
+import "./interfaces/IMarket.sol";
 
 import {
     ISuperfluid,
