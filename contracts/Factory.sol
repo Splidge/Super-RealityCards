@@ -54,11 +54,11 @@ contract Factory is Ownable {
     }
 
 
-    function setAddresses(address _referenceCard, address _sfHost, address _sfAgreements, address _daiSuperToken) external onlyOwner {
-        // maybe we just use this instead of the constructor?
-        sfHost = _sfHost;
-        sfAgreements = _sfAgreements;
-        daiSuperToken = _daiSuperToken;
-    }
+    // function setAddresses(address _sfHost, address _sfAgreements, address _daiSuperToken) external onlyOwner {
+    //     // maybe we just use this instead of the constructor?
+    //     sfHost = _sfHost;
+    //     sfAgreements = _sfAgreements;
+    //     daiSuperToken = _daiSuperToken;
+    // }
 
 }

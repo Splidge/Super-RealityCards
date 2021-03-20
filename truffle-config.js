@@ -78,8 +78,17 @@ module.exports = {
       confirmations: 0,    // # of confs to wait between deployments. (default: 0)
       timeoutBlocks: 50,  // # of blocks before a deployment times out  (minimum/default: 50)
       skipDryRun: true,     // Skip dry run before migrations? (default: false for public nets )
-      gasPrice: 30000000000,
+      gasPrice: 10000000000,
      },
+     xdai: {
+        provider: function() {
+          return new HDWalletProvider(MNEMONIC, "http://rpc.xdaichain.com");
+        },
+        network_id: 100,
+        gas: 12000000,
+        gasPrice: 1000000000,
+        skipDryRun: true,  
+      },
     // Useful for private networks
     // private: {
     // provider: () => new HDWalletProvider(mnemonic, `https://network.io`),
