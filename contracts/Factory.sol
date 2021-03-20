@@ -9,14 +9,22 @@ import "./interfaces/IMarket.sol";
 
 contract Factory is Ownable, Initializable {
 
-    constructor(){}
+    address referenceMarket;
+    address referenceCard;
 
-    function initialize() external initializer {
-   
+    constructor(address _referenceMarket, address _referenceCard){
+        referenceMarket =_referenceMarket;
+        referenceCard = _referenceCard;
+
     }
 
-    function createMarket() external onlyOwner {
-        
+    function initialize() external initializer {}
+
+    function createMarket(uint256 _numberOfCards, uint256 marketFinishTime) external onlyOwner {
+        address _marketAddress = Clones.clone(referenceMarket);
+        IMarket _marketInstance = IMarket(_marketAddress);
+        _marketInstance.initialize(referenceCard,_numberOfCards,marketFinishTime);
+
     }
 
 }
