@@ -20,12 +20,13 @@ import {
 } from "@superfluid-finance/ethereum-contracts/contracts/apps/SuperAppBase.sol";
 import "@openzeppelin/contracts/proxy/Initializable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/math/SafeMath.sol";
+import "@openzeppelin/contracts/utils/SafeCast.sol";
 
 contract Card is SuperAppBase, Ownable {
     IMarket private market;
     IConstantFlowAgreementV1 private cfa; 
     ISuperfluid private host;
-    IConstantFlowAgreementV1 private cfa;
     ISuperToken private superToken;
     int96 public minStep = 1;
     int96 private markup;
@@ -41,6 +42,8 @@ contract Card is SuperAppBase, Ownable {
     // simple way to avoid having to sort the bids is that you only allow high bids
     address public winner = address(this);  // current winner
 
+    using SafeMath for uint256;
+
     constructor(){}
 
     function initialize(
@@ -48,13 +51,12 @@ contract Card is SuperAppBase, Ownable {
         IConstantFlowAgreementV1 _cfa,
         ISuperToken _superToken,
         int96 _markup // percentage with 3 decimals ex: 133333 =  133.333%
-    ) {
+    ) public {
         require(address(_host) != address(0), "host is nil");
         require(address(_cfa) != address(0), "cfa is nil");
         require(address(_superToken) != address(0), "superToken1 is nil");
 
         market = IMarket(msg.sender);
-
         host = _host;
         cfa = _cfa;
         superToken = _superToken;
@@ -136,7 +138,8 @@ contract Card is SuperAppBase, Ownable {
         bidders[winner].prev = bidder;
         winner = bidder;
         minStep = flowRate * (markup - precision);
-        market.newRental(bidder,flowRate,0);
+        uint256 bidPrice = SafeCast.toUint256(flowRate).mul(86400);
+        market.newRental(bidder,bidPrice,0);
     }
 
     function _cancelBack(bytes memory ctx, address bidder)
@@ -228,7 +231,7 @@ contract Card is SuperAppBase, Ownable {
           bidders[bidders[user].next].prev = bidders[user].prev;
       }
       delete bidders[user];
-      market.exit(bidder);
+      market.exit(user);
     }
     /**************************************************************************
      * SuperApp callbacks
@@ -246,6 +249,7 @@ contract Card is SuperAppBase, Ownable {
         onlyHost
         returns (bytes memory)
     {
+        require(block.timestamp <= market.marketFinishTime()); // DC, I think this is safe
         return _placeBid(_ctx, _agreementId);
     }
 
@@ -262,6 +266,7 @@ contract Card is SuperAppBase, Ownable {
         onlyHost
         returns (bytes memory)
     {
+        require(block.timestamp <= market.marketFinishTime()); // DC, I think this is safe
         return _updateBid(_ctx, _agreementId); //this should break instead
     }
 
@@ -280,6 +285,10 @@ contract Card is SuperAppBase, Ownable {
         // According to the app basic law, we should never revert in a termination callback
         if (!_isAccepted(_superToken) || !_isCFAv1(_agreementClass)) return _ctx;
         (address user,) = abi.decode(_agreementData, (address, address));
+        if (block.timestamp >= market.marketFinishTime()){
+            bytes memory newCtx = _stopCancelBack(_ctx, user);
+            return newCtx;
+        }
         return _closeBid(_ctx, _agreementId, user);
     }
 
@@ -302,6 +311,20 @@ contract Card is SuperAppBase, Ownable {
         require(_isAccepted(_superToken) , "Auction: not accepted tokens");
         require(_isCFAv1(_agreementClass), "Auction: only CFAv1 supported");
         _;
+    }
+
+    /////////////////////////////
+    ///// Market Resolution /////
+    /////////////////////////////
+
+    modifier checkState(){
+        if(block.timestamp >= market.marketFinishTime()){_closeMarket();}
+        _;
+    }
+
+    function _closeMarket() internal {
+        // DO NOT REVERT IN HERE, if this is called by a user closing a flow then the flow will not be closed.
+
     }
 
 }

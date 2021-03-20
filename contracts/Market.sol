@@ -63,9 +63,9 @@ contract Market is Ownable, Initializable, ERC721 {
 
     }
 
-    function newRental(address _newOwner, uint256 _newPrice, uint256 _timeLimit, uint256 _tokenId) external {
+    function newRental(address _newOwner, uint256 _newPrice, uint256 _timeLimit) external {
         _transfer(ownerOf(tokenIds[msg.sender]), _newOwner, tokenIds[msg.sender]);
-        LogNewRental(_newOwner, _newPrice, _timeLimit, _tokenId);
+        LogNewRental(_newOwner, _newPrice, _timeLimit, tokenIds[msg.sender]);
     }
 
     function exit(address owner) external {
