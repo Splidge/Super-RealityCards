@@ -14,11 +14,16 @@ import {
 import {
     IInstantDistributionAgreementV1
 } from "@superfluid-finance/ethereum-contracts/contracts/interfaces/agreements/IInstantDistributionAgreementV1.sol";
+import {
+    IConstantFlowAgreementV1
+} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/agreements/IConstantFlowAgreementV1.sol";
 
 contract Market is Ownable, ERC721, SuperAppBase {
 
     IInstantDistributionAgreementV1 private _ida;
-
+    ISuperToken private daiSuperToken;
+    ISuperfluid private sfHost;
+    IConstantFlowAgreementV1 private sfAgreements;
 
     ////////////////////////////////////
     //////// EVENTS ////////////////////
@@ -49,18 +54,15 @@ contract Market is Ownable, ERC721, SuperAppBase {
     address[] public cards;
     mapping (address => uint256) public tokenIds; 
     uint256 public marketFinishTime;
-    address public sfHost;
-    address public sfAgreements;
-    address public daiSuperToken;
     int96 public MIN_BID_INCREASE = 110000; // 110000 is 10%, there's 3 decimal places precision
 
     constructor(address _cardReference, uint256 _numberOfCards, uint256 _marketFinishTime) ERC721("SuperRealityCards","SRC") {
         marketFinishTime = _marketFinishTime;
         // clone the cards, add them to the array and init them
         for(uint256 i; i < _numberOfCards; i++){
-            address _card = new Card(sfHost, sfAgreements, daiSuperToken, MIN_BID_INCREASE);
-            cards[i] = _card; 
-            tokenIds[_card] = i;
+            Card _card = new Card(sfHost, sfAgreements, daiSuperToken, MIN_BID_INCREASE);
+            cards[i] = address(_card); 
+            tokenIds[address(_card)] = i;
             _mint(address(this), i); 
         }
     }
