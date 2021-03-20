@@ -54,7 +54,9 @@ contract Factory is Ownable {
         string memory ipfsHash = '0x0';
         LogMarketCreated1(_marketAddress , zeroAddress, zeroAddress, 1);
         LogMarketCreated2(_marketAddress, 0, tokenURIs, ipfsHash, timestamps, totalNftMintCount);
-
+        LogMarketApproved(_marketAddress, true);
+        LogAdvancedWarning(0);
+        LogMaximumDuration(uint32(marketFinishTime-block.timestamp));
     }
 
 
