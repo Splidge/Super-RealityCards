@@ -27,7 +27,6 @@ contract Market is Ownable, ERC721, SuperAppBase {
     bool marketFinalised;
     mapping(address => bool) public userAlreadyWithdrawn;
 
-    IInstantDistributionAgreementV1 private _ida;
     ISuperToken private daiSuperToken;
     ISuperfluid private sfHost;
     IConstantFlowAgreementV1 private sfAgreements;
