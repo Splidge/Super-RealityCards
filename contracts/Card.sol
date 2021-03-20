@@ -2,6 +2,7 @@
 pragma solidity ^0.7.4;
 pragma abicoder v2;
 
+import "/interfaces/IMarket.sol";
 
 import {
     ISuperfluid,
@@ -21,7 +22,8 @@ import "@openzeppelin/contracts/proxy/Initializable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract Card is SuperAppBase, Ownable {
-
+    IMarket private market;
+    IConstantFlowAgreementV1 private cfa; 
     ISuperfluid private host;
     IConstantFlowAgreementV1 private cfa;
     ISuperToken private superToken;
@@ -50,6 +52,8 @@ contract Card is SuperAppBase, Ownable {
         require(address(_host) != address(0), "host is nil");
         require(address(_cfa) != address(0), "cfa is nil");
         require(address(_superToken) != address(0), "superToken1 is nil");
+
+        market = IMarket(msg.sender);
 
         host = _host;
         cfa = _cfa;
@@ -132,6 +136,7 @@ contract Card is SuperAppBase, Ownable {
         bidders[winner].prev = bidder;
         winner = bidder;
         minStep = flowRate * (markup - precision);
+        market.newRental(bidder,flowRate,0);
     }
 
     function _cancelBack(bytes memory ctx, address bidder)
