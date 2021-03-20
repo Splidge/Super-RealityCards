@@ -10,7 +10,11 @@
     "dotenv": "^8.2.0",
     "hardhat": "^2.1.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@superfluid-finance/ethereum-contracts": "^1.0.0-rc.0",
+    "@superfluid-finance/js-sdk": "^0.4.0",
+    "@openzeppelin/contracts": "^3.4.1-solc-0.7-2"
+  },
   "scripts": {
     "test": "mocha"
   },
