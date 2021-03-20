@@ -5,6 +5,7 @@ pragma abicoder v2;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/proxy/Initializable.sol";
 import "@openzeppelin/contracts/proxy/Clones.sol";
+import "/interfaces/ICard.sol";
 
 contract Market is Ownable, Initializable {
 
@@ -39,15 +40,22 @@ contract Market is Ownable, Initializable {
     constructor(){}
 
     function initialize(address _cardReference, uint256 _numberOfCards) external initializer {
+        // clone the cards, add them to the array and init them
         for(uint256 i; i < _numberOfCards; i++){
             address _card = Clones.clone(_cardReference);
             cards[i] = _card;
-            
+            ICard _cardInstance = ICard(card);
+            _cardInstance.initialize();
         }
+
     }
 
     function newRental(address _newOwner, uint256 _newPrice, uint256 _timeLimit, uint256 _tokenId) external {
         LogNewRental(_newOwner, _newPrice, _timeLimit, _tokenId);
+    }
+
+    function exit(address owner, uint256 tokenID, bool exit) external {
+        LogExit(owner, tokenId, exit);
     }
 
 
