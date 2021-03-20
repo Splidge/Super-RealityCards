@@ -56,7 +56,7 @@ contract Card is SuperAppBase, Ownable {
         IConstantFlowAgreementV1 _cfa,
         ISuperToken _superToken,
         int96 _markup // percentage with 3 decimals ex: 133333 =  133.333%
-    ) public {
+    ) {
         require(address(_host) != address(0), "host is nil");
         require(address(_cfa) != address(0), "cfa is nil");
         require(address(_superToken) != address(0), "superToken1 is nil");

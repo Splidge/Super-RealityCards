@@ -56,7 +56,7 @@ contract Market is Ownable, ERC721, SuperAppBase {
     uint256 public marketFinishTime;
     int96 public MIN_BID_INCREASE = 110000; // 110000 is 10%, there's 3 decimal places precision
 
-    constructor(address _cardReference, uint256 _numberOfCards, uint256 _marketFinishTime) ERC721("SuperRealityCards","SRC") {
+    constructor(uint256 _numberOfCards, uint256 _marketFinishTime) ERC721("SuperRealityCards","SRC") {
         marketFinishTime = _marketFinishTime;
         // clone the cards, add them to the array and init them
         for(uint256 i; i < _numberOfCards; i++){
@@ -79,7 +79,7 @@ contract Market is Ownable, ERC721, SuperAppBase {
     function declareWinner(uint256 _tokenId) external onlyOwner {
         require(marketFinishTime <= block.timestamp);
         // winner has been decided, make a payout.
-
+        _tokenId;
 
     }
 
