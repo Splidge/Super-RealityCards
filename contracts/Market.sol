@@ -4,8 +4,8 @@ pragma abicoder v2;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "./Card.sol";
-//import "@openzeppelin/contracts/math/SafeMath.sol";
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "./Interfaces/INFTHub.sol";
+import "@openzeppelin/contracts/math/SafeMath.sol";
 import {
     ISuperfluid,
     ISuperToken,
@@ -16,7 +16,7 @@ import {
     IConstantFlowAgreementV1
 } from "@superfluid-finance/ethereum-contracts/contracts/interfaces/agreements/IConstantFlowAgreementV1.sol";
 
-contract Market is Ownable, ERC721, SuperAppBase {
+contract Market is Ownable, /*ERC721,*/ SuperAppBase {
 
     using SafeMath for uint256;
 
@@ -61,21 +61,25 @@ contract Market is Ownable, ERC721, SuperAppBase {
     mapping (address => uint256) public tokenIds; 
     uint256 public marketFinishTime;
     int96 public MIN_BID_INCREASE = 110000; // 110000 is 10%, there's 3 decimal places precision
+    address NFTHubAddress;
 
-    constructor(uint256 _numberOfCards, uint256 _marketFinishTime) ERC721("SuperRealityCards","SRC") {
+    constructor(uint256 _numberOfCards, uint256 _marketFinishTime, address _NFTHubAddress) /*ERC721("SuperRealityCards","SRC")*/ {
         marketFinishTime = _marketFinishTime;
+        NFTHubAddress = _NFTHubAddress;
+        NFTHub _nftHub = NFTHub(NFTHubAddress);
         // clone the cards, add them to the array and init them
         for(uint256 i; i < _numberOfCards; i++){
             Card _card = new Card(sfHost, sfAgreements, daiSuperToken, MIN_BID_INCREASE);
             cards[i] = address(_card); 
             tokenIds[address(_card)] = i;
-            _mint(address(this), i); 
+            _nftHub.mint(address(this), i); 
         }
         numberOfCards = _numberOfCards;
     }
 
     function newRental(address _newOwner, uint256 _newPrice, uint256 _timeLimit) external {
-        _transfer(ownerOf(tokenIds[msg.sender]), _newOwner, tokenIds[msg.sender]);
+        NFTHub _nftHub = NFTHub(NFTHubAddress);
+        _nftHub.transfer(_nftHub.checkOwnerOf(tokenIds[msg.sender]), _newOwner, tokenIds[msg.sender]);
         LogNewRental(_newOwner, _newPrice, _timeLimit, tokenIds[msg.sender]);
     }
 
@@ -89,7 +93,8 @@ contract Market is Ownable, ERC721, SuperAppBase {
             Card _card = Card(cards[i]);
             _card.closeMarket();
         }
-        totalCollected = balanceOf(address(this));
+        NFTHub _nftHub = NFTHub(NFTHubAddress);
+        totalCollected = _nftHub.checkBalanceOf(address(this));
         winningOutcome = _tokenId;
         marketFinalised = true;
     }
