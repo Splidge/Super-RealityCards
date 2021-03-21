@@ -70,12 +70,13 @@ contract Market is Ownable, SuperAppBase {
         sfHost = _sfHost;
         sfAgreements = _sfAgreements;
         daiSuperToken = _daiSuperToken;
+        uint256 _totalTokens = _nftHub.totalTokens();
         // clone the cards, add them to the array and init them
         for(uint256 i; i < _numberOfCards; i++){
             Card _card = new Card(sfHost, sfAgreements, daiSuperToken, MIN_BID_INCREASE);
             cards.push(address(_card)); 
-            tokenIds[address(_card)] = i;
-            _nftHub.mint(address(this), _nftHub.totalTokens().add(i));
+            tokenIds[address(_card)] = _totalTokens.add(i);
+            _nftHub.mint(address(this), tokenIds[address(_card)]);
         }
         numberOfCards = _numberOfCards;
     }
