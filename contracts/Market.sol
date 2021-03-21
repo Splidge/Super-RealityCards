@@ -66,7 +66,7 @@ contract Market is Ownable, SuperAppBase {
     constructor(uint256 _numberOfCards, uint256 _marketFinishTime, address _NFTHubAddress) {
         marketFinishTime = _marketFinishTime;
         NFTHubAddress = _NFTHubAddress;
-        NFTHub _nftHub = NFTHub(NFTHubAddress);
+        INFTHub _nftHub = INFTHub(NFTHubAddress);
         // clone the cards, add them to the array and init them
         for(uint256 i; i < _numberOfCards; i++){
             Card _card = new Card(sfHost, sfAgreements, daiSuperToken, MIN_BID_INCREASE);
@@ -78,7 +78,7 @@ contract Market is Ownable, SuperAppBase {
     }
 
     function newRental(address _newOwner, uint256 _newPrice, uint256 _timeLimit) external {
-        NFTHub _nftHub = NFTHub(NFTHubAddress);
+        INFTHub _nftHub = INFTHub(NFTHubAddress);
         _nftHub.transfer(_nftHub.checkOwnerOf(tokenIds[msg.sender]), _newOwner, tokenIds[msg.sender]);
         LogNewRental(_newOwner, _newPrice, _timeLimit, tokenIds[msg.sender]);
     }
@@ -93,7 +93,7 @@ contract Market is Ownable, SuperAppBase {
             Card _card = Card(cards[i]);
             _card.closeMarket();
         }
-        NFTHub _nftHub = NFTHub(NFTHubAddress);
+        INFTHub _nftHub = INFTHub(NFTHubAddress);
         totalCollected = _nftHub.checkBalanceOf(address(this));
         winningOutcome = _tokenId;
         marketFinalised = true;

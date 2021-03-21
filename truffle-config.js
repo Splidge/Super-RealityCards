@@ -112,7 +112,7 @@ module.exports = {
       settings: {
         evmVersion: "istanbul",
         optimizer: {
-          enabled: false,
+          enabled: true,
           runs: 200,
         },
       },

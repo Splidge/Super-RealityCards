@@ -2,7 +2,7 @@
 pragma solidity ^0.7.4;
 pragma abicoder v2;
 
-interface NFTHub {
+interface INFTHub {
 
     function mint(address _to, uint256 _tokenId) external;
     function transfer(address _from, address _to, uint256 _tokenId) external;

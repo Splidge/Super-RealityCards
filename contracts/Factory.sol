@@ -3,7 +3,7 @@ pragma solidity ^0.7.4;
 pragma abicoder v2;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "./interfaces/IMarket.sol";
+import "./Interfaces/IMarket.sol";
 import "./Market.sol";
 
 contract Factory is Ownable {
@@ -13,6 +13,7 @@ contract Factory is Ownable {
     address public sfAgreements;
     address public daiSuperToken;
     address public zeroAddress = address(0);
+    address public NFTHubAddress;
 
     event LogMarketCreated1(address contractAddress, address treasuryAddress, address nftHubAddress, uint256 referenceContractVersion);
     event LogMarketCreated2(
@@ -28,14 +29,15 @@ contract Factory is Ownable {
     event LogAdvancedWarning(uint256 _newAdvancedWarning);
     event LogMaximumDuration(uint256 _newMaximumDuration);
 
-    constructor(address _sfHost, address _sfAgreements, address _daiSuperToken){
+    constructor(address _sfHost, address _sfAgreements, address _daiSuperToken, address _NFTHubAddress){
+        NFTHubAddress = _NFTHubAddress;
         sfHost = _sfHost;
         sfAgreements = _sfAgreements;
         daiSuperToken = _daiSuperToken;
     }
 
     function createMarket(uint256 _numberOfCards, uint256 marketFinishTime) external onlyOwner {
-        Market _market = new Market(_numberOfCards,marketFinishTime);
+        Market _market = new Market(_numberOfCards,marketFinishTime, NFTHubAddress);
         markets.push(address(_market));
         string[] memory tokenURIs = new string[](20);
         for(uint256 i; i <_numberOfCards; i++){
