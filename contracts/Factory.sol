@@ -37,7 +37,7 @@ contract Factory is Ownable {
         daiSuperToken = ISuperToken(_daiSuperToken);
     }
 
-    function createMarket(uint256 _numberOfCards, uint256 marketFinishTime) external {
+    function createMarket(uint256 _numberOfCards, uint256 marketFinishTime, string memory _ipfsHash) external {
         Market _market = new Market(_numberOfCards,marketFinishTime, NFTHubAddress, sfHost, sfAgreements, daiSuperToken);
         markets.push(address(_market));
         for(uint256 i ; i < _numberOfCards; i++){
@@ -48,7 +48,7 @@ contract Factory is Ownable {
         timestamps[1] = uint32(marketFinishTime);
         timestamps[2] = uint32(marketFinishTime);
         uint256 totalNftMintCount = _numberOfCards;
-        string memory ipfsHash = '0x0';
+        string memory ipfsHash = _ipfsHash;
         address[] memory cardAddresses = _market.getCards();
         LogMarketCreated1(address(_market) , zeroAddress, zeroAddress, 1);
         LogMarketCreated2(address(_market), 0, tokenURIs, ipfsHash, timestamps, totalNftMintCount, cardAddresses);
