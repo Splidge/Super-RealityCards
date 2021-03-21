@@ -9,9 +9,9 @@ import "./Market.sol";
 contract Factory is Ownable {
 
     address[] public markets;
-    address public sfHost;
-    address public sfAgreements;
-    address public daiSuperToken;
+    ISuperfluid public sfHost;
+    IConstantFlowAgreementV1 public sfAgreements;
+    ISuperToken public daiSuperToken;
     address public zeroAddress = address(0);
     address public NFTHubAddress;
     string[] public tokenURIs;
@@ -33,13 +33,13 @@ contract Factory is Ownable {
 
     constructor(address _sfHost, address _sfAgreements, address _daiSuperToken, address _NFTHubAddress){
         NFTHubAddress = _NFTHubAddress;
-        sfHost = _sfHost;
-        sfAgreements = _sfAgreements;
-        daiSuperToken = _daiSuperToken;
+         sfHost = ISuperfluid(_sfHost);
+        sfAgreements = IConstantFlowAgreementV1( _sfAgreements);
+        daiSuperToken = ISuperToken(_daiSuperToken);
     }
 
     function createMarket(uint256 _numberOfCards, uint256 marketFinishTime) external {
-        Market _market = new Market(_numberOfCards,marketFinishTime, NFTHubAddress);
+        Market _market = new Market(_numberOfCards,marketFinishTime, NFTHubAddress, sfHost, sfAgreements, daiSuperToken);
         markets.push(address(_market));
         for(uint256 i ; i < _numberOfCards; i++){
             tokenURIs.push('i');

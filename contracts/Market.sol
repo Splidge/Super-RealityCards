@@ -63,10 +63,13 @@ contract Market is Ownable, SuperAppBase {
     uint256 public marketFinishTime;
     int96 public MIN_BID_INCREASE = 110000; // 110000 is 10%, there's 3 decimal places precision
 
-    constructor(uint256 _numberOfCards, uint256 _marketFinishTime, address _NFTHubAddress) {
+    constructor(uint256 _numberOfCards, uint256 _marketFinishTime, address _NFTHubAddress, ISuperfluid _sfHost, IConstantFlowAgreementV1 _sfAgreements, ISuperToken _daiSuperToken) {
         marketFinishTime = _marketFinishTime;
         NFTHubAddress = _NFTHubAddress;
         INFTHub _nftHub = INFTHub(NFTHubAddress);
+        sfHost = _sfHost;
+        sfAgreements = _sfAgreements;
+        daiSuperToken = _daiSuperToken;
         // clone the cards, add them to the array and init them
         for(uint256 i; i < _numberOfCards; i++){
             Card _card = new Card(sfHost, sfAgreements, daiSuperToken, MIN_BID_INCREASE);
