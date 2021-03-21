@@ -34,6 +34,12 @@ module.exports = function(deployer, network, accounts) {
         deployer.deploy(Factory,sfHostGoerli,sfAgreementGoerli,fDAIxGoerli,NFTHub.address);
         })
     }
+    else if (network === "development")  
+    {
+        deployer.deploy(NFTHub).then(function() {
+        deployer.deploy(Factory,sfHostGoerli,sfAgreementGoerli,fDAIxGoerli,NFTHub.address);
+        })
+    }
 
     // console.log('Factory ', Factory.address);
     // console.log('ReferenceMarket ', Market.address);
