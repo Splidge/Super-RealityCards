@@ -8,11 +8,16 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 contract NFTHub is Ownable, ERC721 {
 
+    using SafeMath for uint256;
+    uint256 public totalTokens;
+    
     constructor() ERC721("SuperRealityCards","SRC") {
 
     }
     function mint(address _to, uint256 _tokenId) external {
+        _tokenId = _tokenId.add(totalTokens);
         _mint(_to, _tokenId);
+        totalTokens++;
     }
     function transfer(address _from, address _to, uint256 _tokenId) external {
         _transfer(_from, _to, _tokenId);
