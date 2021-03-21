@@ -16,7 +16,7 @@ import {
     IConstantFlowAgreementV1
 } from "@superfluid-finance/ethereum-contracts/contracts/interfaces/agreements/IConstantFlowAgreementV1.sol";
 
-contract Market is Ownable, /*ERC721,*/ SuperAppBase {
+contract Market is Ownable, SuperAppBase {
 
     using SafeMath for uint256;
 
@@ -57,13 +57,13 @@ contract Market is Ownable, /*ERC721,*/ SuperAppBase {
     //////// VARIABLES /////////////////
     ////////////////////////////////////
 
+    address public NFTHubAddress;
     address[] public cards;
     mapping (address => uint256) public tokenIds; 
     uint256 public marketFinishTime;
     int96 public MIN_BID_INCREASE = 110000; // 110000 is 10%, there's 3 decimal places precision
-    address NFTHubAddress;
 
-    constructor(uint256 _numberOfCards, uint256 _marketFinishTime, address _NFTHubAddress) /*ERC721("SuperRealityCards","SRC")*/ {
+    constructor(uint256 _numberOfCards, uint256 _marketFinishTime, address _NFTHubAddress) {
         marketFinishTime = _marketFinishTime;
         NFTHubAddress = _NFTHubAddress;
         NFTHub _nftHub = NFTHub(NFTHubAddress);
