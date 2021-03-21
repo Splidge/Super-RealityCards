@@ -3,7 +3,6 @@ pragma solidity ^0.7.4;
 pragma abicoder v2;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "./interfaces/IMarket.sol";
 import "./Market.sol";
 
 contract Factory is Ownable {
