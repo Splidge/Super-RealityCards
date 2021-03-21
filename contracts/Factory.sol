@@ -36,7 +36,7 @@ contract Factory is Ownable {
         daiSuperToken = _daiSuperToken;
     }
 
-    function createMarket(uint256 _numberOfCards, uint256 marketFinishTime) external onlyOwner {
+    function createMarket(uint256 _numberOfCards, uint256 marketFinishTime) external {
         Market _market = new Market(_numberOfCards,marketFinishTime, NFTHubAddress);
         markets.push(address(_market));
         string[] memory tokenURIs = new string[](20);
