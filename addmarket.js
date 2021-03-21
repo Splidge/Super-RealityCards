@@ -1,7 +1,7 @@
 //require("dotenv").config();
 
 var Factory = artifacts.require("Factory");
-var factoryAddress = '0xD78015920c7bE02d21cD3fd14ED43EA2b2d6218f'; 
+var factoryAddress = '0x7ab1f39B4f22a0aC97cEf262f1b30A954B37aDc8'; 
 
 module.exports = function() {
   async function createMarket() {

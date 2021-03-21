@@ -10,29 +10,62 @@ var sfAgreementRopsten = '0xaD2F1f7cd663f6a15742675f975CcBD42bb23a88'; // Ropste
 var fDAIxRopsten = '0xBF6201a6c48B56d8577eDD079b84716BB4918E8A'; // Ropsten
 
 // JavaScript export
-module.exports = function(deployer, network, accounts) {
-    // Deployer is the Truffle wrapper for deploying
-    // contracts to the network
-    // deployer.deploy(Card);
-    // Deploy the contract to the network
+// module.exports = function(deployer, network, accounts) {
+//     // Deployer is the Truffle wrapper for deploying
+//     // contracts to the network
+//     // deployer.deploy(Card);
+//     // Deploy the contract to the network
 
+//     if (network === "ropsten") 
+//     {
+//         deployer.deploy(NFTHub).then(function() {
+//         return deployer.deploy(Factory,sfHostRopsten,sfAgreementRopsten,fDAIxRopsten,NFTHub.address);
+//         })
+//     } 
+//     else if (network === "goerli")  
+//     {
+//         deployer.deploy(NFTHub).then(function() {
+//         deployer.deploy(Factory,sfHostGoerli,sfAgreementGoerli,fDAIxGoerli,NFTHub.address);
+//         })
+//     }
+//     else if (network === "development")  
+//     {
+//         deployer.deploy(NFTHub).then(function() {
+//         deployer.deploy(Factory,sfHostGoerli,sfAgreementGoerli,fDAIxGoerli,NFTHub.address);
+//         })
+//     }
+
+//     // console.log('Factory ', Factory.address);
+//     // console.log('ReferenceMarket ', Market.address);
+//     // console.log('ReferenceCard ', Card.address);
+// }
+
+
+module.exports = async (deployer, network, accounts) => 
+{
     if (network === "ropsten") 
     {
-        deployer.deploy(NFTHub).then(function() {
-        return deployer.deploy(Factory,sfHostRopsten,sfAgreementRopsten,fDAIxRopsten,NFTHub.address);
-        })
+        // deploy treasury, factory, reference market and nft hub
+        await deployer.deploy(NFTHub);
+        nfthub = await NFTHub.deployed();
+        await deployer.deploy(Factory,sfHostRopsten,sfAgreementRopsten,fDAIxRopsten,NFTHub.address);
+        factory = await Factory.deployed();
     } 
-    else if (network === "goerli")  
+    else if (network === "goerli") 
     {
-        deployer.deploy(NFTHub).then(function() {
-        deployer.deploy(Factory,sfHostGoerli,sfAgreementGoerli,fDAIxGoerli,NFTHub.address);
-        })
-    }
-    else if (network === "development")  
+        // deploy treasury, factory, reference market and nft hub
+        await deployer.deploy(NFTHub);
+        nfthub = await NFTHub.deployed();
+        await deployer.deploy(Factory,sfHostGoerli,sfAgreementGoerli,fDAIxGoerli,NFTHub.address);
+        factory = await Factory.deployed();
+    } 
+    else if (network === "development") 
     {
-        deployer.deploy(NFTHub).then(function() {
-        deployer.deploy(Factory,sfHostGoerli,sfAgreementGoerli,fDAIxGoerli,NFTHub.address);
-        })
+        // deploy treasury, factory, reference market and nft hub
+        await deployer.deploy(NFTHub);
+        nfthub = await NFTHub.deployed();
+        await deployer.deploy(Factory,sfHostGoerli,sfAgreementGoerli,fDAIxGoerli,NFTHub.address);
+        factory = await Factory.deployed();
     }
     else if (network === "development")  
     {
@@ -41,7 +74,5 @@ module.exports = function(deployer, network, accounts) {
         })
     }
 
-    // console.log('Factory ', Factory.address);
-    // console.log('ReferenceMarket ', Market.address);
-    // console.log('ReferenceCard ', Card.address);
+    console.log('Factory address is: ', Factory.address);
 }
