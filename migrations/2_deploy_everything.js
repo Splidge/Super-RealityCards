@@ -1,4 +1,5 @@
 var Factory = artifacts.require('./Factory.sol');
+var NFTHub = artifacts.require('./NFTHub.sol');
 
 var sfHostGoerli = '0x22ff293e14F1EC3A09B137e9e06084AFd63adDF9'; //  Goerli
 var sfAgreementGoerli = '0xEd6BcbF6907D4feEEe8a8875543249bEa9D308E8'; // Goerli
@@ -17,15 +18,21 @@ module.exports = function(deployer, network, accounts) {
 
     if (network === "ropsten") 
     {
-        deployer.deploy(Factory,sfHostRopsten,sfAgreementRopsten,fDAIxRopsten);
+        deployer.deploy(NFTHub).then(function() {
+        return deployer.deploy(Factory,sfHostRopsten,sfAgreementRopsten,fDAIxRopsten,NFTHub.address);
+        })
     } 
     else if (network === "goerli")  
     {
-        deployer.deploy(Factory,sfHostGoerli,sfAgreementGoerli,fDAIxGoerli);
+        deployer.deploy(NFTHub).then(function() {
+        deployer.deploy(Factory,sfHostGoerli,sfAgreementGoerli,fDAIxGoerli,NFTHub.address);
+        })
     }
     else if (network === "xdai")  
     {
-        deployer.deploy(Factory,sfHostGoerli,sfAgreementGoerli,fDAIxGoerli);
+        deployer.deploy(NFTHub).then(function() {
+        deployer.deploy(Factory,sfHostGoerli,sfAgreementGoerli,fDAIxGoerli,NFTHub.address);
+        })
     }
 
     // console.log('Factory ', Factory.address);
