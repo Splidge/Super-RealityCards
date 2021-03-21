@@ -99,7 +99,7 @@ contract Market is Ownable, SuperAppBase {
             _card.closeMarket();
         }
         INFTHub _nftHub = INFTHub(NFTHubAddress);
-        totalCollected = _nftHub.checkBalanceOf(address(this));
+        totalCollected = daiSuperToken.balanceOf(address(this));
         winningOutcome = _tokenId;
         marketFinalised = true;
     }
