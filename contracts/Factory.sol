@@ -15,6 +15,7 @@ contract Factory is Ownable {
     address public zeroAddress = address(0);
     address public NFTHubAddress;
     string[] public tokenURIs;
+    address public mostRecentMarket;
 
     event LogMarketCreated1(address contractAddress, address treasuryAddress, address nftHubAddress, uint256 referenceContractVersion);
     event LogMarketCreated2(
