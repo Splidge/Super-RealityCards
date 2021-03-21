@@ -8,5 +8,6 @@ interface IMarket {
     function newRental(address _newOwner, uint256 _newPrice, uint256 _timeLimit) external;
     function exit(address owner) external;
     function marketFinishTime() external view returns(uint256);
+    function getCards() external returns(address[] memory cards);
 
 }

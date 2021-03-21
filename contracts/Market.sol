@@ -4,7 +4,7 @@ pragma abicoder v2;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "./Card.sol";
-import "@openzeppelin/contracts/math/SafeMath.sol";
+//import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import {
     ISuperfluid,
@@ -103,6 +103,10 @@ contract Market is Ownable, ERC721, SuperAppBase {
         uint256 _winningsToTransfer = _numerator.div(_card.totalTimeHeld());
         daiSuperToken.send(msg.sender, _winningsToTransfer, "0");
         userAlreadyWithdrawn[msg.sender] = true;
+    }
+
+    function getCards() external view returns(address[] memory){
+        return cards;
     }
 
 }

@@ -21,7 +21,8 @@ contract Factory is Ownable {
         string[] tokenURIs,
         string ipfsHash,
         uint32[] timestamps,
-        uint256 totalNftMintCount
+        uint256 totalNftMintCount,
+        address[] cardAddresses
     );
     event LogMarketApproved(address market, bool hidden);
     event LogAdvancedWarning(uint256 _newAdvancedWarning);
@@ -46,8 +47,9 @@ contract Factory is Ownable {
         timestamps[2] = uint32(marketFinishTime);
         uint256 totalNftMintCount = _numberOfCards;
         string memory ipfsHash = '0x0';
+        address[] memory cardAddresses = _market.getCards();
         LogMarketCreated1(address(_market) , zeroAddress, zeroAddress, 1);
-        LogMarketCreated2(address(_market), 0, tokenURIs, ipfsHash, timestamps, totalNftMintCount);
+        LogMarketCreated2(address(_market), 0, tokenURIs, ipfsHash, timestamps, totalNftMintCount, cardAddresses);
         LogMarketApproved(address(_market), true);
         LogAdvancedWarning(0);
         LogMaximumDuration(uint32(marketFinishTime-block.timestamp));

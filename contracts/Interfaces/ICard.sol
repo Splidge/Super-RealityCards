@@ -8,4 +8,5 @@ interface ICard {
     function timeHeld(address) external;
     function totalTimeHeld() external;
 
+
 }
