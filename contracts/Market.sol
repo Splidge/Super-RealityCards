@@ -75,7 +75,7 @@ contract Market is Ownable, SuperAppBase {
             Card _card = new Card(sfHost, sfAgreements, daiSuperToken, MIN_BID_INCREASE);
             cards.push(address(_card)); 
             tokenIds[address(_card)] = i;
-            _nftHub.mint(address(this), i); 
+            _nftHub.mint(address(this), _nftHub.totalTokens().add(i));
         }
         numberOfCards = _numberOfCards;
     }

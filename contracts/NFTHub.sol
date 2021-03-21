@@ -15,7 +15,6 @@ contract NFTHub is Ownable, ERC721 {
 
     }
     function mint(address _to, uint256 _tokenId) external {
-        _tokenId = _tokenId.add(totalTokens);
         _mint(_to, _tokenId);
         totalTokens++;
     }
