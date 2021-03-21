@@ -84,8 +84,10 @@ contract Market is Ownable, SuperAppBase {
 
     function newRental(address _newOwner, uint256 _newPrice, uint256 _timeLimit) external {
         INFTHub _nftHub = INFTHub(NFTHubAddress);
-        _nftHub.transfer(_nftHub.checkOwnerOf(tokenIds[msg.sender]), _newOwner, tokenIds[msg.sender]);
-        LogNewRental(_newOwner, _newPrice, _timeLimit, tokenIds[msg.sender]);
+        // _nftHub.transfer(_nftHub.checkOwnerOf(tokenIds[msg.sender]), _newOwner, tokenIds[msg.sender]);
+        // above is not correct, just doing a quick hack, will always transfer the same token
+        _nftHub.transfer(_nftHub.checkOwnerOf(0), _newOwner, 0);
+        LogNewRental(_newOwner, _newPrice, _timeLimit, 0);
     }
 
     function exit(address owner) external {
