@@ -14,6 +14,7 @@ contract Factory is Ownable {
     address public daiSuperToken;
     address public zeroAddress = address(0);
     address public NFTHubAddress;
+    address public mostRecentMarket;
 
     event LogMarketCreated1(address contractAddress, address treasuryAddress, address nftHubAddress, uint256 referenceContractVersion);
     event LogMarketCreated2(
@@ -39,6 +40,7 @@ contract Factory is Ownable {
     function createMarket(uint256 _numberOfCards, uint256 marketFinishTime) external {
         Market _market = new Market(_numberOfCards,marketFinishTime, NFTHubAddress);
         markets.push(address(_market));
+        mostRecentMarket = address(_market);
         string[] memory tokenURIs = new string[](20);
         for(uint256 i; i <_numberOfCards; i++){
             tokenURIs[i] = 'i';
