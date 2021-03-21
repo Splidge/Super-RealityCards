@@ -4,7 +4,7 @@ pragma abicoder v2;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "./Card.sol";
-import "./Interfaces/INFTHub.sol";
+import "./interfaces/INFTHub.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import {
     ISuperfluid,
